@@ -24,7 +24,7 @@ from database import (
 # ============================================================
 
 st.set_page_config(
-    page_title="Ledgerly | AI Expense Tracker",
+    page_title="Hisab Khata | AI Expense Tracker",
     page_icon="💰",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -875,7 +875,7 @@ if not st.session_state.logged_in:
                 </div>
 
                 <h1 class="login-title">
-                    Ledgerly
+                    Hisab Khata
                 </h1>
 
                 <p class="login-subtitle">
@@ -1114,7 +1114,7 @@ with st.sidebar:
                 💰
             </div>
 
-            Ledgerly
+            Hisab Khata
 
         </div>
         """
@@ -1483,7 +1483,7 @@ if "Overview" in navigation:
 
             insight_text = (
                 "Add your first expense and "
-                "Ledgerly will start identifying "
+                "Hisab Khata will start identifying "
                 "your spending patterns."
             )
 
@@ -2177,7 +2177,7 @@ elif "AI Assistant" in navigation:
                 </h1>
 
                 <p class="hero-subtitle">
-                    Ask Ledgerly anything about your spending,
+                    Ask Hisab Khata anything about your spending,
                     {username}.
                 </p>
 
@@ -2200,7 +2200,7 @@ elif "AI Assistant" in navigation:
         </p>
 
         <p class="panel-caption">
-            Ledgerly AI can analyse your actual
+            Hisab Khata AI can analyse your actual
             expenses and wallet balance.
         </p>
 
@@ -2221,7 +2221,7 @@ elif "AI Assistant" in navigation:
     )
 
     if st.button(
-        "✨ Ask Ledgerly AI",
+        "✨ Ask Hisab Khata AI",
         use_container_width=True,
     ):
 
@@ -2234,7 +2234,7 @@ elif "AI Assistant" in navigation:
         else:
 
             with st.spinner(
-                "Ledgerly AI is analysing your finances..."
+                "Hisab Khata AI is analysing your finances..."
             ):
 
                 answer = ask_ai(
@@ -2252,7 +2252,7 @@ elif "AI Assistant" in navigation:
                          )
                 else:
                     with st.container(border=True):
-                        st.markdown("### 🤖 Ledgerly AI")
+                        st.markdown("### 🤖 Hisab Khata AI")
                         st.markdown(answer)
 
 # ============================================================
@@ -2276,7 +2276,7 @@ elif "Settings" in navigation:
                 </h1>
 
                 <p class="hero-subtitle">
-                    Manage your Ledgerly account and wallet.
+                    Manage your Hisab Khata account and wallet.
                 </p>
 
             </div>
@@ -2311,7 +2311,7 @@ elif "Settings" in navigation:
                 </p>
 
                 <p class="panel-caption">
-                    Your Ledgerly account information
+                    Your Hisab Khata account information
                 </p>
 
                 <div style="
@@ -2430,11 +2430,21 @@ html(
         style="
             text-align:center;
             margin-top:3rem;
+            padding:1.2rem 0;
             color:#617289;
-            font-size:0.65rem;
+            font-size:0.68rem;
+            letter-spacing:0.02em;
         "
     >
-        Ledgerly · Intelligent personal finance
+        © 2026 Hisab Khata · All Rights Reserved
+        <span style="margin:0 8px; color:#3f4f63;">|</span>
+        Designed by
+        <span style="
+            color:#19c37d;
+            font-weight:700;
+        ">
+            Aayush Varshney
+        </span>
     </div>
     """
 )
