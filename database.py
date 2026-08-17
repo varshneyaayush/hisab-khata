@@ -59,12 +59,28 @@ def create_database():
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            created_at TEXT NOT NULL
-        )
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    language TEXT NOT NULL DEFAULT 'English',
+    created_at TEXT NOT NULL)
     """)
+
+    cursor.execute(
+        "PRAGMA table_info(users)"
+    )
+
+    user_columns = [
+        row["name"]
+        for row in cursor.fetchall()
+    ]
+
+    if "language" not in user_columns:
+
+        cursor.execute("""
+            ALTER TABLE users
+            ADD COLUMN language TEXT NOT NULL DEFAULT 'English'
+        """)
 
     # --------------------------------------------------------
     # WALLETS
@@ -141,7 +157,7 @@ def create_database():
 # USER FUNCTIONS
 # ============================================================
 
-def create_user(username, password):
+def create_user(username, password, language="English"):
 
     username = username.strip()
 
@@ -157,12 +173,14 @@ def create_user(username, password):
             INSERT INTO users (
                 username,
                 password,
+                language,
                 created_at
             )
-            VALUES (?, ?, ?)
+            VALUES (?, ?, ?, ?)
         """, (
             username,
             hash_password(password),
+            language,
             datetime.now().isoformat()
         ))
 
@@ -200,7 +218,7 @@ def login_user(username, password):
     cursor = connection.cursor()
 
     cursor.execute("""
-        SELECT id, username
+        SELECT id, username, language
         FROM users
         WHERE username = ?
         AND password = ?
@@ -433,6 +451,27 @@ def get_login_history(user_id):
 
     return history
 
+# ============================================================
+# LANGUAGE PREFERENCE
+# ============================================================
+
+def update_user_language(user_id, language):
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        UPDATE users
+        SET language = ?
+        WHERE id = ?
+    """, (
+        language,
+        user_id
+    ))
+
+    connection.commit()
+
+    connection.close()
 
 # ============================================================
 # DATABASE TEST

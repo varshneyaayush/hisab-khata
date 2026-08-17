@@ -26,7 +26,7 @@ client = OpenAI(
 # AI ASSISTANT
 # ============================================================
 
-def ask_ai(question, expenses, wallet_balance, username):
+def ask_ai(question, expenses, wallet_balance, username, language="English"):
 
     expense_text = ""
 
@@ -57,6 +57,15 @@ Current wallet balance:
 
 Expense history:
 {expense_text}
+
+Response language:
+
+The user selected "{language}".
+
+Always answer in the selected language.
+If the selected language is Hindi, answer in Hindi.
+If the selected language is Hinglish, answer naturally in Hindi-English mix using Roman script.
+If the selected language is English, answer in English.
 
 User's question:
 {question}

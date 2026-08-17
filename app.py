@@ -16,6 +16,7 @@ from database import (
     subtract_money,
     add_expense,
     get_expenses,
+    update_user_language,
 )
 
 
@@ -36,6 +37,139 @@ create_database()
 # ============================================================
 # HELPERS
 # ============================================================
+
+TRANSLATIONS = {
+
+    "English": {
+        "overview": "Overview",
+        "expenses": "Expenses",
+        "analytics": "Analytics",
+        "ai_assistant": "AI Assistant",
+        "settings": "Settings",
+        "workspace": "WORKSPACE",
+        "add_money": "Add money to wallet",
+        "current_wallet": "Current wallet",
+        "total_available": "TOTAL AVAILABLE",
+        "total_spent": "TOTAL SPENT",
+        "this_month": "THIS MONTH",
+        "recent_transactions": "Recent transactions",
+        "add_expense": "Add an expense",
+        "spending_activity": "Spending activity",
+        "financial_overview": "Here's your financial overview for today.",
+        "personal_finance": "PERSONAL FINANCE",
+        "ai_active": "✨ AI Assistant Active",
+        "increase_wallet": "Increase the amount available for your expenses.",
+        "available_balance": "Available balance",
+        "total_available": "TOTAL AVAILABLE",
+        "total_spent": "TOTAL SPENT",
+        "this_month": "THIS MONTH",
+        "monthly_expenses": "Your expenses this month",
+        "latest_activity": "Latest activity from your ledger",
+        "transaction_ledger": "TRANSACTION LEDGER",
+        "user_expenses": "{username}'s expenses",
+        "every_transaction": "Every transaction in one place.",
+        "financial_analytics": "FINANCIAL ANALYTICS",
+        "spending_analytics": "Spending analytics",
+        "understand_spending": "Understand where your money goes.",
+        "settings_title": "Settings",
+        "settings_subtitle": "Manage your Hisab Khata preferences.",
+        "language": "Language",
+        "language_description": "Choose the language you want to use in Hisab Khata.",
+        "choose_language": "Choose your language",
+    },
+
+    "हिंदी": {
+        "overview": "ओवरव्यू",
+        "expenses": "खर्चे",
+        "analytics": "विश्लेषण",
+        "ai_assistant": "AI सहायक",
+        "settings": "सेटिंग्स",
+        "workspace": "कार्यस्थल",
+        "add_money": "पैसे जोड़ें",
+        "current_wallet": "वर्तमान वॉलेट",
+        "total_available": "कुल उपलब्ध",
+        "total_spent": "कुल खर्च",
+        "this_month": "इस महीने",
+        "recent_transactions": "हाल के लेन-देन",
+        "add_expense": "खर्च जोड़ें",
+        "spending_activity": "खर्च की गतिविधि",
+        "financial_overview": "आज आपके वित्तीय खर्च और बचत का पूरा विवरण यहाँ है।",
+        "personal_finance": "व्यक्तिगत वित्त",
+        "ai_active": "✨ AI Assistant सक्रिय है",
+        "increase_wallet": "अपने खर्चों के लिए उपलब्ध राशि बढ़ाएँ।",
+        "available_balance": "उपलब्ध शेष राशि",
+        "total_available": "कुल उपलब्ध",
+        "total_spent": "कुल खर्च",
+        "this_month": "इस महीने",
+        "monthly_expenses": "इस महीने के आपके खर्च",
+        "latest_activity": "आपके हिसाब-किताब की हाल की गतिविधि",
+        "transaction_ledger": "लेन-देन का हिसाब",
+        "user_expenses": "{username} के खर्च",
+        "every_transaction": "आपके सभी लेन-देन एक ही जगह।",
+        "financial_analytics": "वित्तीय विश्लेषण",
+        "spending_analytics": "खर्च का विश्लेषण",
+        "understand_spending": "समझें कि आपका पैसा कहाँ खर्च हो रहा है।",
+        "settings_title": "सेटिंग्स",
+        "settings_subtitle": "अपने Hisab Khata की प्राथमिकताएँ बदलें।",
+        "language": "भाषा",
+        "language_description": "Hisab Khata में अपनी पसंदीदा भाषा चुनें।",
+        "choose_language": "अपनी भाषा चुनें",
+    },
+
+    "Hinglish": {
+        "overview": "Overview",
+        "expenses": "Kharch",
+        "analytics": "Spending Analysis",
+        "ai_assistant": "AI Assistant",
+        "settings": "Settings",
+        "workspace": "WORKSPACE",
+        "add_money": "Paise add karein",
+        "current_wallet": "Current wallet",
+        "total_available": "TOTAL AVAILABLE",
+        "total_spent": "TOTAL SPENT",
+        "this_month": "IS MONTH",
+        "recent_transactions": "Recent transactions",
+        "add_expense": "Expense add karein",
+        "spending_activity": "Spending activity",
+        "financial_overview": "Aaj aapke finances ka complete overview yahan hai.",
+        "personal_finance": "PERSONAL FINANCE",
+        "ai_active": "✨ AI Assistant Active",
+        "increase_wallet": "Apne expenses ke liye available amount badhayein.",
+        "available_balance": "Available balance",
+        "total_available": "TOTAL AVAILABLE",
+        "total_spent": "TOTAL SPENT",
+        "this_month": "IS MONTH",
+        "monthly_expenses": "Is month ke aapke expenses",
+        "latest_activity": "Aapke hisaab-kitaab ki latest activity",
+        "transaction_ledger": "TRANSACTION LEDGER",
+        "user_expenses": "{username} ke expenses",
+        "every_transaction": "Aapke saare transactions ek hi jagah.",
+        "financial_analytics": "FINANCIAL ANALYTICS",
+        "spending_analytics": "Spending analysis",
+        "understand_spending": "Samjhein aapka paisa kahan ja raha hai.",
+        "settings_title": "Settings",
+        "settings_subtitle": "Apni Hisab Khata preferences manage karein.",
+        "language": "Language",
+        "language_description": "Hisab Khata mein apni preferred language choose karein.",
+        "choose_language": "Apni language choose karein",
+        
+    }
+}
+
+
+def t(key):
+    language = st.session_state.get(
+        "language",
+        "English"
+    )
+
+    return TRANSLATIONS.get(
+        language,
+        TRANSLATIONS["English"]
+    ).get(
+        key,
+        key
+    )
 
 def money(value):
     return f"₹{value:,.0f}"
@@ -85,6 +219,9 @@ if "user_id" not in st.session_state:
 
 if "username" not in st.session_state:
     st.session_state.username = ""
+
+if "language" not in st.session_state:
+    st.session_state.language = "English"
 
 
 # ============================================================
@@ -898,6 +1035,16 @@ if not st.session_state.logged_in:
             unsafe_allow_html=True
         )
 
+        language = st.selectbox(
+            "🌐 Choose your language",
+            [
+                "English",
+                "हिंदी",
+                "Hinglish"
+                ],
+                key="login_language"
+        )
+
         username = st.text_input(
             "Username",
             placeholder="Enter your username",
@@ -950,7 +1097,8 @@ if not st.session_state.logged_in:
 
                     user_id = create_user(
                         username,
-                        password
+                        password,
+                        language
                     )
 
                     if user_id:
@@ -988,6 +1136,9 @@ if not st.session_state.logged_in:
 
                     st.session_state.username = user[
                         "username"
+                    ]
+                    st.session_state.language = user[
+                        "language"
                     ]
 
                     st.rerun()
@@ -1128,36 +1279,39 @@ with st.sidebar:
         """
     )
 
-    navigation = st.radio(
-    "Navigation",
-    [
-        "🏠  Overview",
-        "💳  Expenses",
-        "📊  Analytics",
-        "🤖  AI Assistant",
-        "⚙️  Settings",
-    ],
+    navigation_options = {
+    f"🏠  {t('overview')}": "Overview",
+    f"💳  {t('expenses')}": "Expenses",
+    f"📊  {t('analytics')}": "Analytics",
+    f"🤖  {t('ai_assistant')}": "AI Assistant",
+    f"⚙️  {t('settings')}": "Settings",
+    }
+    selected_navigation = st.radio(
+        "Navigation",
+        list(navigation_options.keys()),
         label_visibility="collapsed",
-    )
+        )
+    navigation = navigation_options[selected_navigation]
+    
     if st.session_state.get("open_ai", False):
-        navigation = "🤖  AI Assistant"
-        st.session_state["open_ai"] = False
+            navigation = "🤖  AI Assistant"
+            st.session_state["open_ai"] = False
+            
+            html(
+                f"""
+                <div class="sidebar-user">
+                
+                <div class="sidebar-user-name">
+                    ◉ {username}
+                </div>
 
-    html(
-        f"""
-        <div class="sidebar-user">
-
-            <div class="sidebar-user-name">
-                ◉ {username}
-            </div>
-
-            <div class="sidebar-user-balance">
-                Balance · {money(remaining_balance)}
-            </div>
-
-        </div>
-        """
-    )
+                <div class="sidebar-user-balance">
+                    Balance · {money(remaining_balance)}
+                </div>
+                
+                </div>
+                """
+                )
 
     st.markdown(
         "<div style='height:0.8rem'></div>",
@@ -1200,7 +1354,7 @@ if "Overview" in navigation:
             <div class="hero-content">
 
                 <div class="eyebrow">
-                    PERSONAL FINANCE
+                    {t("personal_finance")}
                 </div>
 
                 <h1 class="hero-title">
@@ -1208,7 +1362,7 @@ if "Overview" in navigation:
                 </h1>
 
                 <p class="hero-subtitle">
-                    Here's your financial overview for today.
+                    {t("financial_overview")}
                 </p>
 
             </div>
@@ -1232,16 +1386,15 @@ if "Overview" in navigation:
     with wallet_col1:
 
         html(
-            """
+            f"""
             <div class="panel">
 
                 <p class="panel-title">
-                    💰 Add money to wallet
+                    💰 {t("add_money")}
                 </p>
 
                 <p class="panel-caption">
-                    Increase the amount available
-                    for your expenses.
+                    {t("increase_wallet")}
                 </p>
 
             </div>
@@ -1287,7 +1440,7 @@ if "Overview" in navigation:
             <div class="panel">
 
                 <p class="panel-title">
-                    Current wallet
+                    {t("current_wallet")}
                 </p>
 
                 <div
@@ -1302,7 +1455,7 @@ if "Overview" in navigation:
                 </div>
 
                 <p class="panel-caption">
-                    Available balance
+                    {t("available_balance")}
                 </p>
 
             </div>
@@ -1332,7 +1485,7 @@ if "Overview" in navigation:
             <div class="metric-card">
 
                 <div class="metric-label">
-                    TOTAL AVAILABLE
+                    {t("total_available")}
                 </div>
 
                 <div class="metric-value">
@@ -1355,7 +1508,7 @@ if "Overview" in navigation:
             <div class="metric-card">
 
                 <div class="metric-label">
-                    TOTAL SPENT
+                    {t("total_spent")}
                 </div>
 
                 <div class="metric-value">
@@ -1379,7 +1532,7 @@ if "Overview" in navigation:
             <div class="metric-card">
 
                 <div class="metric-label">
-                    THIS MONTH
+                    {t("this_month")}
                 </div>
 
                 <div class="metric-value">
@@ -1414,15 +1567,15 @@ if "Overview" in navigation:
     with left:
 
         html(
-            """
+            f"""
             <div class="panel">
 
                 <p class="panel-title">
-                    Spending activity
+                    {t("spending_activity")}
                 </p>
 
                 <p class="panel-caption">
-                    Your expenses this month
+                    {t("monthly_expenses")}
                 </p>
 
             </div>
@@ -1538,15 +1691,15 @@ if "Overview" in navigation:
     with recent_col:
 
         html(
-            """
+            f"""
             <div class="panel">
 
                 <p class="panel-title">
-                    Recent transactions
+                    {t("recent_transactions")}
                 </p>
 
                 <p class="panel-caption">
-                    Latest activity from your ledger
+                    {t("latest_activity")}
                 </p>
 
             </div>
@@ -1715,15 +1868,15 @@ elif "Expenses" in navigation:
             <div class="hero-content">
 
                 <div class="eyebrow">
-                    TRANSACTION LEDGER
+                    {t("transaction_ledger")}
                 </div>
 
                 <h1 class="hero-title">
-                    {username}'s expenses
+                    {username} — {t("expenses")}
                 </h1>
 
                 <p class="hero-subtitle">
-                    Every transaction in one place.
+                    {t("every_transaction")}
                 </p>
 
             </div>
@@ -1807,21 +1960,21 @@ elif "Analytics" in navigation:
             <div class="hero-content">
 
                 <div class="eyebrow">
-                    FINANCIAL ANALYTICS
+                    {t("financial_analytics")}
                 </div>
 
                 <h1 class="hero-title">
-                    Your spending analytics
+                    {t("spending_analytics")}
                 </h1>
 
                 <p class="hero-subtitle">
-                    A deeper look at where your money goes, {username}.
+                    {t("understand_spending")}
                 </p>
 
             </div>
 
             <div class="ai-badge">
-                📊 Smart Analytics
+                📊 {t("ai_active")}
             </div>
 
         </div>
@@ -2155,6 +2308,82 @@ elif "Analytics" in navigation:
             """
         )
 
+# ============================================================
+# SETTINGS PAGE
+# ============================================================
+
+elif navigation == "Settings":
+
+    html(
+        f"""
+        <div class="hero">
+
+            <div class="hero-content">
+
+                <div class="eyebrow">
+                    {t("settings")}
+                </div>
+
+                <h1 class="hero-title">
+                    {t("settings_title")}
+                </h1>
+
+                <p class="hero-subtitle">
+                    {t("settings_subtitle")}
+                </p>
+
+            </div>
+
+        </div>
+        """
+    )
+
+    html(
+        f"""
+        <div class="panel">
+
+            <p class="panel-title">
+                🌐 {t("language")}
+            </p>
+
+            <p class="panel-caption">
+                {t("language_description")}
+            </p>
+
+        </div>
+        """
+    )
+
+    language_options = [
+        "English",
+        "हिंदी",
+        "Hinglish"
+    ]
+
+    current_language = st.session_state.get(
+        "language",
+        "English"
+    )
+
+    selected_language = st.selectbox(
+        t("choose_language"),
+        language_options,
+        index=language_options.index(
+            current_language
+        ),
+        key="settings_language"
+    )
+
+    if selected_language != current_language:
+
+        update_user_language(
+            user_id,
+            selected_language
+        )
+
+        st.session_state.language = selected_language
+
+        st.rerun()
 
 # ============================================================
 # AI ASSISTANT PAGE
@@ -2192,7 +2421,7 @@ elif "AI Assistant" in navigation:
     )
 
     html(
-    """
+    f"""
     <div class="panel">
 
         <p class="panel-title">
@@ -2242,6 +2471,7 @@ elif "AI Assistant" in navigation:
                     expenses=expenses,
                     wallet_balance=wallet_balance,
                     username=username,
+                    language=st.session_state.language,
                 )
                 
                 
@@ -2255,170 +2485,6 @@ elif "AI Assistant" in navigation:
                         st.markdown("### 🤖 Hisab Khata AI")
                         st.markdown(answer)
 
-# ============================================================
-# SETTINGS PAGE
-# ============================================================
-
-elif "Settings" in navigation:
-
-    html(
-        f"""
-        <div class="hero">
-
-            <div class="hero-content">
-
-                <div class="eyebrow">
-                    ACCOUNT SETTINGS
-                </div>
-
-                <h1 class="hero-title">
-                    Settings
-                </h1>
-
-                <p class="hero-subtitle">
-                    Manage your Hisab Khata account and wallet.
-                </p>
-
-            </div>
-
-            <div class="ai-badge">
-                ⚙️ Account
-            </div>
-
-        </div>
-        """
-    )
-
-
-    # --------------------------------------------------------
-    # PROFILE
-    # --------------------------------------------------------
-
-    settings_left, settings_right = st.columns(
-        [1, 1],
-        gap="large"
-    )
-
-
-    with settings_left:
-
-        html(
-            f"""
-            <div class="panel">
-
-                <p class="panel-title">
-                    👤 Profile
-                </p>
-
-                <p class="panel-caption">
-                    Your Hisab Khata account information
-                </p>
-
-                <div style="
-                    margin-top:1rem;
-                    padding:1rem;
-                    border-radius:12px;
-                    background:rgba(255,255,255,0.035);
-                    border:1px solid rgba(255,255,255,0.06);
-                ">
-
-                    <div style="
-                        color:#718198;
-                        font-size:.65rem;
-                        font-weight:700;
-                    ">
-                        USERNAME
-                    </div>
-
-                    <div style="
-                        color:#f1f5f9;
-                        font-size:1.05rem;
-                        font-weight:800;
-                        margin-top:.3rem;
-                    ">
-                        {username}
-                    </div>
-
-                </div>
-
-            </div>
-            """
-        )
-
-
-    # --------------------------------------------------------
-    # WALLET
-    # --------------------------------------------------------
-
-    with settings_right:
-
-        html(
-            f"""
-            <div class="panel">
-
-                <p class="panel-title">
-                    💰 Wallet
-                </p>
-
-                <p class="panel-caption">
-                    Current available balance
-                </p>
-
-                <div style="
-                    color:#19c37d;
-                    font-size:2rem;
-                    font-weight:800;
-                    margin-top:.8rem;
-                ">
-                    {money(wallet_balance)}
-                </div>
-
-                <p class="panel-caption">
-                    Available to spend
-                </p>
-
-            </div>
-            """
-        )
-
-
-    st.markdown(
-        "<div style='height:1.5rem'></div>",
-        unsafe_allow_html=True
-    )
-
-
-    # --------------------------------------------------------
-    # ACCOUNT ACTIONS
-    # --------------------------------------------------------
-
-    html(
-        """
-        <div class="panel">
-
-            <p class="panel-title">
-                🔐 Account actions
-            </p>
-
-            <p class="panel-caption">
-                Manage your current session.
-            </p>
-
-        </div>
-        """
-    )
-
-    if st.button(
-        "🚪 Logout",
-        use_container_width=True,
-        key="settings_logout"
-    ):
-
-        st.session_state.logged_in = False
-        st.session_state.user_id = None
-        st.session_state.username = ""
-
-        st.rerun()
 
 # ============================================================
 # FOOTER
