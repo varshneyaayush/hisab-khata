@@ -5,21 +5,10 @@ from openai import OpenAI
 
 
 # ============================================================
-# LOAD API KEY
+# LOAD ENVIRONMENT
 # ============================================================
 
 load_dotenv()
-
-api_key = os.getenv("OPENAI_API_KEY")
-
-
-# ============================================================
-# OPENAI CLIENT
-# ============================================================
-
-client = OpenAI(
-    api_key=api_key
-)
 
 
 # ============================================================
@@ -27,6 +16,16 @@ client = OpenAI(
 # ============================================================
 
 def ask_ai(question, expenses, wallet_balance, username, language="English"):
+
+    api_key = os.getenv("OPENAI_API_KEY")
+
+    if not api_key or not api_key.strip():
+        return (
+            "The AI assistant is temporarily unavailable because "
+            "the API key is not configured.\n\n"
+            "Your Hisab Khata data is safe. "
+            "Please configure the API key to activate AI."
+        )
 
     expense_text = ""
 
@@ -84,6 +83,10 @@ Instructions:
 
 
     try:
+
+        client = OpenAI(
+            api_key=api_key
+        )
 
         response = client.responses.create(
             model="gpt-5.6",
